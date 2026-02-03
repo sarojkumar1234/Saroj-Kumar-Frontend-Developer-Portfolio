@@ -1,0 +1,8 @@
+/* Custom utilities for font-display */
+.font-display {
+  font-family: "Syne", system-ui, sans-serif;
+}
+
+.font-body {
+  font-family: "Inter", system-ui, sans-serif;
+}
