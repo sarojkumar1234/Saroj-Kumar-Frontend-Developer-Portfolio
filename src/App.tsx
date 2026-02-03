@@ -27,10 +27,10 @@ const ContactLink = ({ href, icon, label }: { href: string; icon: React.ReactNod
   </a>
 )
 
-const RevealSection = ({ id, title, children }: { id?: string; title: string; children: React.ReactNode }) => {
+const RevealSection = ({ id, title, children, className = '' }: { id?: string; title: string; children: React.ReactNode; className?: string }) => {
   const { ref, revealed } = useScrollReveal(0.08)
   return (
-    <section id={id} ref={ref} className={`mb-20 ${revealed ? 'revealed' : ''} reveal`}>
+    <section id={id} ref={ref} className={`mb-20 ${revealed ? 'revealed' : ''} reveal ${className}`}>
       <h2 className="text-xl font-semibold font-display text-cyan-400/95 mb-8 flex items-center gap-3 tracking-tight">
         <span className="w-1 h-7 bg-linear-to-b from-cyan-400 to-teal-500 rounded-full" />
         {title}
@@ -180,7 +180,7 @@ const ExperienceCard = ({
       }`}
     >
       <div className="absolute inset-0 rounded-2xl bg-linear-to-r from-cyan-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      <div className="relative p-5 flex items-center justify-between gap-4">
+        <div className="relative p-5 flex items-center justify-between gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2">
             <h3 className="text-lg font-semibold text-white font-display tracking-tight">{title}</h3>
@@ -220,7 +220,7 @@ const ExperienceCard = ({
         }`}
       >
         <div className="overflow-hidden">
-          <div className="px-5 pb-5 pt-0 border-t border-white/5 mt-0">
+            <div className="px-5 pb-5 pt-0 border-t border-white/5 mt-0">
             <ul className="space-y-3 pt-4">
               {bullets.map((bullet, i) => (
                 <li key={i} className="bullet-accent text-slate-300 text-[15px] leading-[1.7]">
@@ -316,7 +316,7 @@ const ThemeToggle = () => {
   return (
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className={`flex items-center gap-2 px-3 py-2 rounded-lg border hover:border-cyan-500/50 transition-all duration-300 ${
+      className={`flex items-center gap-2 px-3 py-2 rounded-lg border hover:border-cyan-500/50 transition-all duration-300 shrink-0 ${
         theme === 'dark' ? 'border-slate-500/30 text-slate-400 hover:text-cyan-400' : 'border-slate-300 text-slate-600 hover:text-cyan-600'
       }`}
       title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
@@ -330,10 +330,16 @@ const ThemeToggle = () => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
         </svg>
       )}
-      <span className="text-xs font-medium hidden sm:inline">{theme === 'dark' ? 'Light' : 'Dark'}</span>
+      <span className="text-xs font-medium">{theme === 'dark' ? 'Light' : 'Dark'}</span>
     </button>
   )
 }
+
+const NAV_ITEMS = [
+  { label: 'Experience', id: 'experience' },
+  { label: 'Projects', id: 'projects' },
+  { label: 'Hobbies', id: 'hobbies' },
+]
 
 const Header = () => {
   const [scrolled, setScrolled] = React.useState(false)
@@ -354,47 +360,44 @@ const Header = () => {
 
   return (
     <header
-      className={`sticky top-0 z-40 transition-all duration-500 backdrop-blur-xl border-b ${
+      className={`sticky top-0 z-40 w-full overflow-hidden transition-all duration-500 backdrop-blur-xl border-b ${
         theme === 'dark' ? 'border-white/10' : 'border-slate-200'
       } ${scrolled ? (theme === 'dark' ? 'shadow-[0_4px_30px_rgba(34,211,238,0.08)]' : 'shadow-lg shadow-slate-200/50') : ''} ${headerBg}`}
     >
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a
-          href="#"
-          onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-          className="group flex items-center gap-3"
-        >
-          <span className="text-xl font-bold font-display tracking-tight">
-            <span className={`${theme === 'dark' ? 'text-white group-hover:text-cyan-400' : 'text-slate-800 group-hover:text-cyan-600'} transition-colors duration-300`}>Saroj</span>
-            <span className="text-cyan-400 group-hover:text-teal-400 transition-colors duration-300"> Kumar</span>
-          </span>
-          <span className={`text-sm font-medium hidden sm:inline border-l pl-3 ml-1 ${
-            theme === 'dark' ? 'text-slate-500 border-white/10' : 'text-slate-600 border-slate-300'
-          }`}>
-            Frontend Developer
-          </span>
-        </a>
-        <div className="flex items-center gap-4">
-        <ThemeToggle />
-        <nav className="flex items-center gap-0.5 overflow-x-auto py-1 scrollbar-hide">
-          {[
-            { label: 'Summary', id: 'summary' },
-            { label: 'Experience', id: 'experience' },
-            { label: 'Projects', id: 'projects' },
-            { label: 'Hobbies', id: 'hobbies' },
-          ].map(({ label, id }) => (
-            <button
-              key={id}
-              onClick={() => scrollTo(id)}
-              className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-300 overflow-hidden group/nav ${
-                theme === 'dark' ? 'text-slate-400 hover:text-cyan-400' : 'text-slate-600 hover:text-cyan-600'
-              }`}
-            >
-              <span className="relative z-10">{label}</span>
-              <span className="absolute inset-0 bg-linear-to-r from-cyan-500/0 to-teal-500/0 group-hover/nav:from-cyan-500/10 group-hover/nav:to-teal-500/10 rounded-lg transition-all duration-300" />
-            </button>
-          ))}
-        </nav>
+      <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="flex items-center justify-between gap-4">
+          <a
+            href="#"
+            onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+            className="group flex items-center shrink-0"
+          >
+            <span className="text-xl font-bold font-display tracking-tight whitespace-nowrap">
+              <span className={`${theme === 'dark' ? 'text-white group-hover:text-cyan-400' : 'text-slate-800 group-hover:text-cyan-600'} transition-colors duration-300`}>Saroj</span>
+              <span className="text-cyan-400 group-hover:text-teal-400 transition-colors duration-300"> Kumar</span>
+            </span>
+            <span className={`text-sm font-medium hidden lg:inline border-l pl-3 ml-2 ${
+              theme === 'dark' ? 'text-slate-500 border-white/10' : 'text-slate-600 border-slate-300'
+            }`}>
+              Frontend Developer
+            </span>
+          </a>
+
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <nav className="flex items-center gap-1">
+              {NAV_ITEMS.map(({ label, id }) => (
+                <button
+                  key={id}
+                  onClick={() => scrollTo(id)}
+                  className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-300 ${
+                    theme === 'dark' ? 'text-slate-400 hover:text-cyan-400' : 'text-slate-600 hover:text-cyan-600'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </nav>
+          </div>
         </div>
       </div>
     </header>
@@ -435,11 +438,11 @@ function App() {
 
       <Header />
 
-      <div className="relative max-w-7xl mx-auto px-6 py-16 md:py-24">
-        <div className="lg:grid lg:grid-cols-[1fr_380px] lg:gap-14">
-          <main className="min-w-0 order-2 lg:order-1">
+      <div className="relative max-w-7xl mx-auto px-6 py-24">
+        <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[1fr_380px] lg:gap-14">
+          <main className="min-w-0 flex flex-col gap-0">
         {/* Hero */}
-        <header className="mb-20 animate-fade-in-up">
+        <header className="mb-20 animate-fade-in-up order-1">
           <h1 className="text-5xl md:text-6xl font-bold font-display text-white mb-4 tracking-tight">
             Saroj <span className="bg-linear-to-r from-cyan-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent animate-gradient-text">Kumar</span>
           </h1>
@@ -455,7 +458,7 @@ function App() {
         </header>
 
         {/* Summary */}
-        <RevealSection id="summary" title="Summary">
+        <RevealSection id="summary" title="Summary" className="order-2">
           <p className="text-slate-300 text-base leading-[1.75] max-w-2xl">
             <HighlightText
               text="Dynamic Frontend Developer with 3.5+ years of experience in building scalable, responsive, and user-friendly web applications. Proficient in JavaScript, ReactJS, TypeScript, Material UI, and Tailwind CSS, with a proven record of delivering end-to-end solutions, collaborating with cross-functional teams, and driving project success."
@@ -464,14 +467,19 @@ function App() {
           </p>
         </RevealSection>
 
+        {/* Skills - after summary on mobile, sidebar on desktop */}
+        <div className="order-3 mb-8 lg:hidden w-full [&_.skills-bubble-container]:min-w-0" id="skills">
+          <SkillsSidebar />
+        </div>
+
         {/* Experience */}
-        <RevealSection id="experience" title="Experience">
+        <RevealSection id="experience" title="Experience" className="order-4">
           <ExperienceAccordion />
         </RevealSection>
 
         {/* Projects */}
-        <RevealSection id="projects" title="Projects">
-          <div className="grid md:grid-cols-2 gap-6">
+        <RevealSection id="projects" title="Projects" className="order-5">
+          <div className="grid sm:grid-cols-2 gap-6">
             <ProjectCard
               name="Rakuten Sports Digital Academy"
               label="Worked with Andres Iniesta and his team"
@@ -508,7 +516,7 @@ function App() {
         </RevealSection>
 
         {/* Education */}
-        <RevealSection title="Education">
+        <RevealSection title="Education" className="order-6">
           <div className="p-6 rounded-2xl bg-white/2 border border-white/5 hover:border-cyan-500/20 transition-all duration-500 hover-lift hover-glow cursor-default">
             <h3 className="text-lg font-semibold text-white font-display tracking-tight">B.Tech, Computer Science and Engineering</h3>
             <p className="text-cyan-400/90 text-sm font-medium mt-1">University of Petroleum and Energy Studies</p>
@@ -517,7 +525,7 @@ function App() {
         </RevealSection>
 
         {/* Hobbies */}
-        <RevealSection id="hobbies" title="Hobbies">
+        <RevealSection id="hobbies" title="Hobbies" className="order-7">
           <div className="flex flex-wrap gap-4">
             <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-white/2 border border-white/5 hover:border-cyan-500/20 transition-all duration-300 hover-lift">
               <span className="text-2xl">🏏</span>
@@ -530,14 +538,14 @@ function App() {
           </div>
         </RevealSection>
 
-        <footer className="mt-28 pt-10 border-t border-white/10 text-center">
+        <footer className="mt-28 pt-10 border-t border-white/10 text-center order-8">
           <p className="text-slate-500 text-sm font-medium">Built with React + Vite + Tailwind</p>
           <p className="text-slate-600 text-xs mt-1">© {new Date().getFullYear()} Saroj Kumar</p>
         </footer>
           </main>
 
-          {/* Skills sidebar - sticky on desktop, above content on mobile */}
-          <div className="order-1 lg:order-2 mb-12 lg:mb-0" id="skills">
+          {/* Skills sidebar - desktop only */}
+          <div className="hidden lg:block" id="skills-desktop">
             <SkillsSidebar />
           </div>
         </div>
