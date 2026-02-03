@@ -296,7 +296,7 @@ const SkillsSidebar = () => (
     <div className="skills-bubble-container skills-focus-ring rounded-2xl border border-white/10 bg-white/3 p-6 backdrop-blur-sm min-w-[300px] relative overflow-hidden">
       <h3 className="skills-title-focus text-xs font-semibold text-cyan-400 uppercase tracking-widest mb-4">Skills</h3>
       <div className="max-h-[min(80vh,560px)] overflow-y-auto overflow-x-hidden space-y-5 pr-1 skills-scroll">
-        {Object.entries(SKILLS).map(([category, skills], catIdx) => (
+        {Object.entries(SKILLS).map(([category, skills]) => (
           <div key={category}>
             <h4 className="text-[10px] font-medium text-slate-500 uppercase tracking-wider mb-2.5">{category}</h4>
             <div className="flex flex-wrap gap-2">
